@@ -92,10 +92,10 @@ def export_contact_found_to_pdf():
     filtered_df = df[df.apply(lambda row: search_term.lower() in row.astype(str).str.lower().str.cat(sep=' '), axis=1)]
 
     # создаем PDF-файл
-    pdf_file = canvas.Canvas("contacts.pdf")
+    pdf_file = canvas.Canvas(f"{search_term} VisitCard.pdf")
     y = 750  # начальная координата для вывода информации
 
-    # выводим найденные данные в форме визитной карточки и добавляем QR-код с телеграм
+    # выводим найденные данные в форме визитной карточки и добавляем QR-код с телеграм ай ди
     for index, row in filtered_df.iterrows():
         pdf_file.drawString(100, y, 'Name: ' + str(row['Name']))
         pdf_file.drawString(100, y-20, 'Lastname: ' + str(row['Lastname']))
@@ -120,12 +120,14 @@ def export_contact_found_to_pdf():
 
 # требует pip install qrcode
 # требует pip install reportlab
+# требует pip install qrcode
+# требует pip install reportlab
 def export_all_contacts_to_pdf():
     # считываем данные из CSV файла в DataFrame
     df = pd.read_csv('phonebook.csv')
 
     # создаем PDF-файл
-    pdf_file = canvas.Canvas("contacts.pdf")
+    pdf_file = canvas.Canvas("all_contacts.pdf")
     y = 750  # начальная координата для вывода информации
 
     # выводим данные в форме визитной карточки и добавляем QR-код с телеграмм
@@ -136,15 +138,6 @@ def export_all_contacts_to_pdf():
         pdf_file.drawString(100, y-60, 'Email: ' + str(row['Email']))
         pdf_file.drawString(100, y-80, 'Telegram: ' + str(row['Telegram']))
         pdf_file.drawString(100, y-100, 'Organization name: ' + str(row['Organization name']))
-        # генерируем QR-код с телеграмм
-        qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('telegram.me/' + row['Telegram'])
-        qr.make(fit=True)
-        img = qr.make_image(fill_color='black', back_color='white')
-        img.save('qrcode.png')
-
-        # добавляем QR-код в PDF
-        pdf_file.drawImage('qrcode.png', 400, y-60, width=100, height=100)
         y -= 150  # смещаем координату по y для следующего контакта
 
     pdf_file.save()
