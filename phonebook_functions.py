@@ -1,3 +1,13 @@
+import csv
+import pandas as pd
+from reportlab.pdfgen import canvas
+import qrcode
+
+
+def main():
+    choose_option()
+
+
 # Функция выбора опций
 # Основная функция для работы с телефонным справочником
 def choose_option():
@@ -37,13 +47,13 @@ def choose_option():
 # Функция для добавления контакта
 def add_contact():
     with open("phonebook.csv", "a") as file:
-        columnnames = ["Name", "Lastname", "Phone", "Email", "Telegram","Organization name"] 
-        name = input("Enter name: ").strip().title()
-        lastname = input("Enter lastname: ").strip().title()
-        phone_number = input("Enter phone number: ").strip()
-        email = input("Enter email: ")
-        telegram_id = input("Enter telegram_id: ").strip()
-        Organization = input("Enter organization name: ").strip().title()
+        columnnames = ["Name", "Lastname", "Phone", "Email", "Telegram", "Organization name"]
+        name = input("Введите имя: ").strip().title()
+        lastname = input("Введите Фамилию: ").strip().title()
+        phone_number = input("Введите номер телефона: ").strip()
+        email = input("Введите email: ")
+        telegram_id = input("Введите telegram_id: ").strip()
+        Organization = input("Введите имя организации: ").strip().title()
         writer = csv.DictWriter(file, columnnames)
         writer.writerow({"Name": name, "Lastname": lastname, "Phone": phone_number, "Email": email, "Telegram": telegram_id,"Organization name": Organization})
     print('Контакт добавлен!')
@@ -63,7 +73,7 @@ def search_contacts():
         print('Name:', row['Name'])
         print('Lastname:', row['Lastname'])
         print('Phone:', row['Phone'])
-        print("Email:", row["Email"]) 
+        print("Email:", row["Email"])
         print("Telegram:", row["Telegram"])
         print("Organization name:", row["Organization name"])
         print('===============================')
@@ -72,8 +82,6 @@ def search_contacts():
 # требует pip install qrcode
 # требует pip install reportlab
 def export_contact_found_to_pdf():
-    from reportlab.pdfgen import canvas
-    import qrcode
     # считываем данные из CSV файла в DataFrame
     df = pd.read_csv('phonebook.csv')
 
@@ -94,7 +102,7 @@ def export_contact_found_to_pdf():
         pdf_file.drawString(100, y-40, 'Phone: ' + str(row['Phone']))
         pdf_file.drawString(100, y-60, 'Email: ' + str(row['Email']))
         pdf_file.drawString(100, y-80, 'Telegram: ' + str(row['Telegram']))
-        pdf_file.drawString(100, y-100, 'Organization name: ' + str(row['Organization name']))      
+        pdf_file.drawString(100, y-100, 'Organization name: ' + str(row['Organization name']))
 # генерируем QR-код с телеграммом
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         qr.add_data('telegram.me/' + row['Telegram'])
@@ -113,9 +121,6 @@ def export_contact_found_to_pdf():
 # требует pip install qrcode
 # требует pip install reportlab
 def export_all_contacts_to_pdf():
-    from reportlab.pdfgen import canvas
-    import qrcode
-    import pandas as pd
     # считываем данные из CSV файла в DataFrame
     df = pd.read_csv('phonebook.csv')
 
@@ -125,14 +130,13 @@ def export_all_contacts_to_pdf():
 
     # выводим данные в форме визитной карточки и добавляем QR-код с телеграмм
     for index, row in df.iterrows():
-    
         pdf_file.drawString(100, y, 'Name: ' + str(row['Name']))
         pdf_file.drawString(100, y-20, 'Lastname: ' + str(row['Lastname']))
         pdf_file.drawString(100, y-40, 'Phone: ' + str(row['Phone']))
         pdf_file.drawString(100, y-60, 'Email: ' + str(row['Email']))
         pdf_file.drawString(100, y-80, 'Telegram: ' + str(row['Telegram']))
         pdf_file.drawString(100, y-100, 'Organization name: ' + str(row['Organization name']))
-         # генерируем QR-код с телеграмм
+        # генерируем QR-код с телеграмм
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         qr.add_data('telegram.me/' + row['Telegram'])
         qr.make(fit=True)
@@ -141,7 +145,6 @@ def export_all_contacts_to_pdf():
 
         # добавляем QR-код в PDF
         pdf_file.drawImage('qrcode.png', 400, y-60, width=100, height=100)
-
         y -= 150  # смещаем координату по y для следующего контакта
 
     pdf_file.save()
@@ -149,20 +152,19 @@ def export_all_contacts_to_pdf():
 
 # Функция удаления контакта
 def delete_contact():
-    import csv
     search_term = input("Поиск контакта: ")
     search = []
     with open("phonebook.csv", "r", newline ='') as file:
         filereader = csv.DictReader(file)
         for row in filereader:
-            search.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]}) 
+            search.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]})
     matching_contacts = []
     for person in search:
         if any(search_term.lower() in value.lower() for value in person.values()):
-            matching_contacts.append(person)   
+            matching_contacts.append(person)
     if len(matching_contacts) == 0:
         print("Контактов с такими данными не найдено.")
-        return 
+        return
     print("Совпадающие контакты:")
     for i, contact in enumerate(matching_contacts):
         print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
@@ -179,25 +181,24 @@ def delete_contact():
 
 # Функция изменения контакта
 def edit_contact():
-    import csv
     search_term = input("Поиск контакта: ")
     search_result = []
     with open("phonebook.csv", "r", newline ='') as file:
         filereader = csv.DictReader(file)
         for row in filereader:
-            search_result.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]}) 
+            search_result.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]})
     matching_contacts = []
     for contact in search_result:
         if any(search_term.lower() in value.lower() for value in contact.values()):
-            matching_contacts.append(contact)   
+            matching_contacts.append(contact)
     if len(matching_contacts) == 0:
         print("Контактов с такими данными не найдено.")
-        return  
+        return
     print("Совпадающие контакты:")
     for i, contact in enumerate(matching_contacts):
         print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
     index = int(input("Введите порядковый номер контакта для изменения: "))
-    print(f"{matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}") 
+    print(f"{matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}")
     print(f"Изменение {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}...")
     print("Выберите поле, которое вы хотите отредактировать:")
     print("1. Номер телефона")
@@ -231,6 +232,5 @@ def edit_contact():
         print(f"Контакт {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']} обновлен.")
 
 
-
-if '__name__' == '__maim__':
+if __name__ == "__main__":
     main()
