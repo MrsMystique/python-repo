@@ -4,10 +4,6 @@ from reportlab.pdfgen import canvas
 import qrcode
 
 
-def main():
-    choose_option()
-
-
 # Функция выбора опций
 # Основная функция для работы с телефонным справочником
 def choose_option():
@@ -92,7 +88,7 @@ def export_contact_found_to_pdf():
     filtered_df = df[df.apply(lambda row: search_term.lower() in row.astype(str).str.lower().str.cat(sep=' '), axis=1)]
 
     # создаем PDF-файл
-    pdf_file = canvas.Canvas(f"{search_term} VisitCard.pdf")
+    pdf_file = canvas.Canvas("Visit Card.pdf")
     y = 750  # начальная координата для вывода информации
 
     # выводим найденные данные в форме визитной карточки и добавляем QR-код с телеграм ай ди
@@ -151,18 +147,17 @@ def delete_contact():
         filereader = csv.DictReader(file)
         for row in filereader:
             search.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]})
-    matching_contacts = []
-    for person in search:
-        if any(search_term.lower() in value.lower() for value in person.values()):
-            matching_contacts.append(person)
-    if len(matching_contacts) == 0:
-        print("Контактов с такими данными не найдено.")
-        return
-    print("Совпадающие контакты:")
-    for i, contact in enumerate(matching_contacts):
-        print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
-    index = int(input("Введите порядковый номер контакта для удаления: "))
-    with open("phonebook.csv", "w", newline ='') as file:
+        matching_contacts = []
+        for person in search:
+            if any(search_term.lower() in value.lower() for value in person.values()):
+                matching_contacts.append(person)
+        if len(matching_contacts) == 0:
+            print("Контактов с такими данными не найдено.")
+            return
+        print("Совпадающие контакты:")
+        for i, contact in enumerate(matching_contacts):
+            print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
+        index = int(input("Введите порядковый номер контакта для удаления: "))
         fieldnames = ["Name", "Lastname", "Phone", "Email", "Telegram", "Organization name"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
@@ -170,7 +165,6 @@ def delete_contact():
             if person not in matching_contacts or person != matching_contacts[index]:
                 writer.writerow(person)
     print("Контакт удален.")
-
 
 # Функция изменения контакта
 def edit_contact():
@@ -180,50 +174,49 @@ def edit_contact():
         filereader = csv.DictReader(file)
         for row in filereader:
             search_result.append({"Name": row["Name"], "Lastname": row["Lastname"], "Phone": row["Phone"], "Email": row["Email"], "Telegram": row["Telegram"], "Organization name": row["Organization name"]})
-    matching_contacts = []
-    for contact in search_result:
-        if any(search_term.lower() in value.lower() for value in contact.values()):
-            matching_contacts.append(contact)
-    if len(matching_contacts) == 0:
-        print("Контактов с такими данными не найдено.")
-        return
-    print("Совпадающие контакты:")
-    for i, contact in enumerate(matching_contacts):
-        print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
-    index = int(input("Введите порядковый номер контакта для изменения: "))
-    print(f"{matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}")
-    print(f"Изменение {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}...")
-    print("Выберите поле, которое вы хотите отредактировать:")
-    print("1. Номер телефона")
-    print("2. Email")
-    print("3. Telegram ID")
-    print("4. Название организации")
-    field_choice = input("Введите номер поля: ")
-    if field_choice == "1":
-        new_phone_number = input(f"Введите новый номер для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
-        matching_contacts[index]["Phone"] = new_phone_number
-    elif field_choice == "2":
-        new_email = input(f"Введите новый email для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
-        matching_contacts[index]["Email"] = new_email
-    elif field_choice == "3":
-        new_telegram_id = input(f"Введите новый telegram id для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
-        matching_contacts[index]["Telegram"] = new_telegram_id
-    elif field_choice == "4":
-        new_organization = input(f"Введите наименование организации {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
-        matching_contacts[index]["Organization name"] = new_organization
-    else:
-        print("Некорректный выбор.")
-        return
-    with open("phonebook.csv", "w", newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=["Name", "Lastname", "Phone", "Email", "Telegram", "Organization name"])
-        writer.writeheader()
+        matching_contacts = []
         for contact in search_result:
-            if contact in matching_contacts:
-                writer.writerow(contact)
-            else:
-                writer.writerow(contact)
-        print(f"Контакт {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']} обновлен.")
+            if any(search_term.lower() in value.lower() for value in contact.values()):
+                matching_contacts.append(contact)
+        if len(matching_contacts) == 0:
+            print("Контактов с такими данными не найдено.")
+            return
+        print("Совпадающие контакты:")
+        for i, contact in enumerate(matching_contacts):
+            print(f"{i}: {contact['Name']} {contact['Lastname']}, {contact['Phone']}, {contact['Email']}, {contact['Telegram']}, {contact['Organization name']}")
+        index = int(input("Введите порядковый номер контакта для изменения: "))
+        print(f"{matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}")
+        print(f"Изменение {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}...")
+        print("Выберите поле, которое вы хотите отредактировать:")
+        print("1. Номер телефона")
+        print("2. Email")
+        print("3. Telegram ID")
+        print("4. Название организации")
+        field_choice = input("Введите номер поля: ")
+        if field_choice == "1":
+            new_phone_number = input(f"Введите новый номер для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
+            matching_contacts[index]["Phone"] = new_phone_number
+        elif field_choice == "2":
+            new_email = input(f"Введите новый email для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
+            matching_contacts[index]["Email"] = new_email
+        elif field_choice == "3":
+            new_telegram_id = input(f"Введите новый telegram id для {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
+            matching_contacts[index]["Telegram"] = new_telegram_id
+        elif field_choice == "4":
+            new_organization = input(f"Введите наименование организации {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']}: ").strip()
+            matching_contacts[index]["Organization name"] = new_organization
+        else:
+            print("Некорректный выбор.")
+            return
+        with open("phonebook.csv", "w", newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=["Name", "Lastname", "Phone", "Email", "Telegram", "Organization name"])
+            writer.writeheader()
+            for contact in search_result:
+                if contact in matching_contacts:
+                    writer.writerow(contact)
+                else:
+                    writer.writerow(contact)
+            print(f"Контакт {matching_contacts[index]['Name']} {matching_contacts[index]['Lastname']} обновлен.")
 
 
-if __name__ == "__main__":
-    main()
+choose_option()
