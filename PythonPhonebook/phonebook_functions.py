@@ -166,6 +166,7 @@ def delete_contact():
                 writer.writerow(person)
     print("Контакт удален.")
 
+
 # Функция изменения контакта
 def edit_contact():
     search_term = input("Поиск контакта: ")
