@@ -48,10 +48,10 @@ def add_contact():
         LASTNAME = input("Введите Фамилию: ").strip().upper()
         PHONE_number = input("Введите номер телефона: ").strip()
         EMAIL = input("Введите EMAIL: ")
-        TELEGRAM_id = input("Введите TELEGRAM_id: ").strip()
+        TELEGRAM_ID = input("Введите TELEGRAM_ID: ").strip()
         ORGANIZATION = input("Введите имя организации: ").strip().upper()
         writer = csv.DictWriter(file, columnNAMEs)
-        writer.writerow({"NAME": NAME, "LASTNAME": LASTNAME, "PHONE": PHONE_number, "EMAIL": EMAIL, "TELEGRAM": TELEGRAM_id,"ORGANIZATION NAME": ORGANIZATION})
+        writer.writerow({"NAME": NAME, "LASTNAME": LASTNAME, "PHONE": PHONE_number, "EMAIL": EMAIL, "TELEGRAM": TELEGRAM_ID,"ORGANIZATION NAME": ORGANIZATION})
     print('Контакт добавлен!')
 
 
@@ -107,7 +107,7 @@ def export_contact_found_to_pdf():
         img.save('qrcode.png')
 
         # добавляем QR-код в PDF
-        pdf_file.drawImage('qrcode.png', 400, y-60, width=100, height=100)
+        pdf_file.drawImage('qrcode.png', 400, y-60, wIDth=100, height=100)
 
         y -= 150  # смещаем координату по y для следующего контакта
 
@@ -201,8 +201,8 @@ def edit_contact():
             new_EMAIL = input(f"Введите новый EMAIL для {matching_contacts[index]['NAME']} {matching_contacts[index]['LASTNAME']}: ").strip()
             matching_contacts[index]["EMAIL"] = new_EMAIL
         elif field_choice == "3":
-            new_TELEGRAM_id = input(f"Введите новый TELEGRAM id для {matching_contacts[index]['NAME']} {matching_contacts[index]['LASTNAME']}: ").strip()
-            matching_contacts[index]["TELEGRAM"] = new_TELEGRAM_id
+            new_TELEGRAM_ID = input(f"Введите новый TELEGRAM ID для {matching_contacts[index]['NAME']} {matching_contacts[index]['LASTNAME']}: ").strip()
+            matching_contacts[index]["TELEGRAM"] = new_TELEGRAM_ID
         elif field_choice == "4":
             new_ORGANIZATION = input(f"Введите наименование организации {matching_contacts[index]['NAME']} {matching_contacts[index]['LASTNAME']}: ").strip()
             matching_contacts[index]["ORGANIZATION NAME"] = new_ORGANIZATION
