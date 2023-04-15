@@ -1,4 +1,4 @@
-from fuel import convert, gauge
+from Knowlege_base_python.Python_sintax.functions.fuel import convert, gauge
 import pytest
 
 def test_conv():

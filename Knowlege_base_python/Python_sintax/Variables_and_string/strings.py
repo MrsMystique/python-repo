@@ -1,5 +1,4 @@
-
-answer = input ("What is your name, beautifull lady: ")
+answer = input("What is your name, beautifull lady: ")
 
 # первый способ совмещения аргумента и текста. Конкатенация
 # print ("Hello, "+ answer +" ,i love you!")
