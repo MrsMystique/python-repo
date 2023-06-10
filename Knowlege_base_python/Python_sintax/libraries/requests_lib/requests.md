@@ -25,8 +25,7 @@ response = requests.get('https://jsonplaceholder.typicode.com/users')
 print(response.status_code)
 print(response.json())
 ```
-
-2. POST-запрос: 
+ 
 
 POST-запрос используется для отправки данных на сервер. 
 
