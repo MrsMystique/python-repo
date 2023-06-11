@@ -22,3 +22,49 @@ filtered_list = [file_name for file_name in original_list if file_name.endswith(
 print(filtered_list)
 
 Output: ["file1.txt", "file4.txt"]
+
+List, set и dict comprehensions - это способы создания новых списков, множеств и словарей в Python на основе существующих коллекций.
+
+List comprehension позволяет создавать новый список на основе элементов существующего списка. Синтаксис выглядит следующим образом:
+
+new_list = [expression for item in old_list if condition]
+
+
+Где expression - это выражение, которое будет применено к каждому элементу item в old_list, condition - это условие, которое должно быть выполнено для каждого элемента, чтобы он был включен в новый список new_list.
+
+Пример:
+
+old_list = [1, 2, 3, 4, 5]
+new_list = [x * 2 for x in old_list if x % 2 == 0]
+print(new_list) # [4, 8]
+
+
+Set comprehension позволяет создавать новое множество на основе элементов существующего множества. Синтаксис выглядит следующим образом:
+
+new_set = {expression for item in old_set if condition}
+
+
+Где expression - это выражение, которое будет применено к каждому элементу item в old_set, condition - это условие, которое должно быть выполнено для каждого элемента, чтобы он был включен в новое множество new_set.
+
+Пример:
+
+old_set = {1, 2, 3, 4, 5}
+new_set = {x * 2 for x in old_set if x % 2 == 0}
+print(new_set) # {8, 4}
+
+
+Dict comprehension позволяет создавать новый словарь на основе элементов существующего словаря. Синтаксис выглядит следующим образом:
+
+new_dict = {key_expression: value_expression for key, value in old_dict.items() if condition}
+
+
+Где key_expression - это выражение, которое будет применено к каждому ключу key в old_dict, value_expression - это выражение, которое будет применено к каждому значению value в old_dict, condition - это условие, которое должно быть выполнено для каждой пары ключ-значение, чтобы она была включена в новый словарь new_dict.
+
+Пример:
+
+old_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}
+new_dict = {k: v * 2 for k, v in old_dict.items() if v % 2 == 0}
+print(new_dict) # {'b': 4, 'd': 8}
+
+
+Comprehensions - это удобный и эффективный способ создания новых коллекций в Python. Они могут быть использованы вместо циклов и условных операторов, что делает код более читаемым и компактным.
